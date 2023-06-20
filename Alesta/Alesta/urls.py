@@ -15,10 +15,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from order.views import OrderAPIView
+from django.urls import path, include
+from django.views.generic import TemplateView
+from rest_framework import routers
+from rest_framework.schemas import get_schema_view
+
+from order.views import OrderViewset, ServiceViewset, InvoiceViewset
+
+
+router = routers.DefaultRouter()
+router.register(r'orders', OrderViewset)
+router.register(r'services', ServiceViewset)
+router.register(r'invoices', InvoiceViewset)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/orderlist', OrderAPIView.as_view())
+    path('swagger-ui/', TemplateView.as_view(
+            template_name='swagger-ui.html',
+            extra_context={'schema_url': 'openapi-schema'}
+        ), name='swagger-ui'),
+    path('api/', include(router.urls)),
+    path('openapi/', get_schema_view(
+        title="Order API",
+        description="Order API.",
+        version="0.1",
+    ), name='openapi-schema'),
 ]

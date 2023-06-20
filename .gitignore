@@ -1,2 +1,5 @@
 .idea
 venv
+Alesta/Alesta/__pycache__/
+Alesta/order/__pycache__/
+Alesta/order/migrations/__pycache__/
