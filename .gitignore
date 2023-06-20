@@ -1,4 +1,5 @@
 .idea
+.env
 venv
 Alesta/Alesta/__pycache__/
 Alesta/order/__pycache__/
