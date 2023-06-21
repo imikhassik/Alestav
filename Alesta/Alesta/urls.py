@@ -16,9 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
 from rest_framework import routers
-from rest_framework.schemas import get_schema_view
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from order.views import OrderViewset, ServiceViewset, InvoiceViewset
 
@@ -31,14 +30,7 @@ router.register(r'invoices', InvoiceViewset)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('swagger-ui/', TemplateView.as_view(
-            template_name='swagger-ui.html',
-            extra_context={'schema_url': 'openapi-schema'}
-        ), name='swagger-ui'),
     path('api/', include(router.urls)),
-    path('openapi/', get_schema_view(
-        title="Order API",
-        description="Order API.",
-        version="0.1",
-    ), name='openapi-schema'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')
 ]

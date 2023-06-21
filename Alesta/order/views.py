@@ -1,30 +1,30 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework import mixins
-from rest_framework.schemas.openapi import AutoSchema
 
 from .models import Order, Service, Invoice
 from .serializers import OrderSerializer, ServiceSerializer, InvoiceSerializer
 
 
+@extend_schema(tags=['orders'])
 class OrderViewset(mixins.CreateModelMixin,
                    mixins.ListModelMixin,
                    viewsets.GenericViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    schema = AutoSchema(tags=["Orders"])
 
 
+@extend_schema(tags=['services'])
 class ServiceViewset(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
-    schema = AutoSchema(tags=["Services"])
 
 
+@extend_schema(tags=['invoices'])
 class InvoiceViewset(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
-    schema = AutoSchema(tags=["Invoices"])
