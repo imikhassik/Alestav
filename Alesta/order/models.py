@@ -27,11 +27,11 @@ class Service(models.Model):
     currency = models.CharField(max_length=3)
     created_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='services', on_delete=models.CASCADE)
 
 
 class Invoice(models.Model):
     invoice_number = models.CharField(max_length=255)
     created_date = models.DateTimeField(auto_now_add=True)
     requisites = models.JSONField()
-    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    order = models.OneToOneField(Order, related_name='invoice', on_delete=models.CASCADE)
