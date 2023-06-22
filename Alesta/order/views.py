@@ -13,6 +13,9 @@ class OrderViewset(mixins.CreateModelMixin,
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 @extend_schema(tags=['services'])
 class ServiceViewset(mixins.CreateModelMixin,
@@ -20,6 +23,9 @@ class ServiceViewset(mixins.CreateModelMixin,
                      viewsets.GenericViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 @extend_schema(tags=['invoices'])
