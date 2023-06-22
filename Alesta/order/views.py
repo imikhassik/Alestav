@@ -9,6 +9,8 @@ from .serializers import OrderSerializer, ServiceSerializer, InvoiceSerializer
 @extend_schema(tags=['orders'])
 class OrderViewset(mixins.CreateModelMixin,
                    mixins.ListModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
                    viewsets.GenericViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -20,6 +22,8 @@ class OrderViewset(mixins.CreateModelMixin,
 @extend_schema(tags=['services'])
 class ServiceViewset(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
                      viewsets.GenericViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
@@ -31,6 +35,7 @@ class ServiceViewset(mixins.CreateModelMixin,
 @extend_schema(tags=['invoices'])
 class InvoiceViewset(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
+                     mixins.DestroyModelMixin,
                      viewsets.GenericViewSet):
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
