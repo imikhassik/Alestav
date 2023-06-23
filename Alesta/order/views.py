@@ -1,9 +1,11 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework import mixins
+from rest_framework.response import Response
 
 from .models import Order, Service, Invoice
-from .serializers import OrderSerializer, ServiceSerializer, InvoiceSerializer
+from .serializers import OrderSerializer, ServiceSerializer, \
+    InvoiceRetrieveSerializer, InvoiceSerializer
 
 
 @extend_schema(tags=['orders'])
@@ -30,6 +32,13 @@ class ServiceViewset(mixins.CreateModelMixin,
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+@extend_schema(tags=['invoices'])
+class InvoiceRetrieveViewset(mixins.RetrieveModelMixin,
+                             viewsets.GenericViewSet):
+    queryset = Invoice.objects.all()
+    serializer_class = InvoiceRetrieveSerializer
 
 
 @extend_schema(tags=['invoices'])

@@ -19,13 +19,14 @@ from django.urls import path, include
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from order.views import OrderViewset, ServiceViewset, InvoiceViewset
+from order.views import OrderViewset, ServiceViewset, InvoiceViewset, InvoiceRetrieveViewset
 
 
 router = routers.DefaultRouter()
 router.register(r'orders', OrderViewset)
 router.register(r'services', ServiceViewset)
 router.register(r'invoices', InvoiceViewset)
+router.register(r'invoice', InvoiceRetrieveViewset)
 
 
 urlpatterns = [
