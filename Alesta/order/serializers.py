@@ -2,6 +2,31 @@ from rest_framework import serializers
 from .models import Order, Service, Invoice
 
 
+class ServiceRetrieveSerializer(serializers.ModelSerializer):
+    info = serializers.SerializerMethodField()
+
+    def get_info(self, obj) -> dict:
+        order = Order.objects.get(pk=obj.order.pk)
+        serializer = OrderSerializer(order)
+        auto_number = serializer.data.pop('auto_number', None)
+        date = serializer.data.pop('created_date', None)
+        agent_name = serializer.data.pop('agent_name', None)
+        transporter = serializer.data.pop('transporter', None)
+        service_name = obj.name
+        info = {
+            'auto_number': auto_number,
+            'date': date,
+            'agent_name': agent_name,
+            'transporter': transporter,
+            'service': service_name,
+        }
+        return info
+
+    class Meta:
+        model = Service
+        fields = ['info']
+
+
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service

@@ -10,7 +10,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Order, Service, Invoice
-from .serializers import OrderSerializer, ServiceSerializer, \
+from .serializers import OrderSerializer, \
+    ServiceSerializer, ServiceRetrieveSerializer, \
     InvoiceRetrieveSerializer, InvoiceSerializer
 
 
@@ -25,6 +26,13 @@ class OrderViewset(mixins.CreateModelMixin,
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+@extend_schema(tags=['Услуги'])
+class ServiceRetrieveViewset(mixins.RetrieveModelMixin,
+                             viewsets.GenericViewSet):
+    queryset = Service.objects.all()
+    serializer_class = ServiceRetrieveSerializer
 
 
 @extend_schema(tags=['Услуги'])
