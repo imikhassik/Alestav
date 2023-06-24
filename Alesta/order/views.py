@@ -94,7 +94,8 @@ class CustomAuthToken(ObtainAuthToken):
                 "password": {"type": "string"},
             }
         }
-    })
+    },
+    tags=['Токен'])
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
