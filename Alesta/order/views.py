@@ -2,7 +2,8 @@ from datetime import datetime
 
 from django.db.models import Sum
 from django.utils import timezone
-from drf_spectacular.utils import extend_schema, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiParameter
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework.decorators import action
@@ -38,9 +39,18 @@ class ServiceViewset(mixins.CreateModelMixin,
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    @extend_schema(examples=[OpenApiExample('Example 1',
-                                            summary='Общая сумма услуг по счетам за период',
-                                            value="{'price__sum': 1000}")])
+    @extend_schema(
+        examples=[
+            OpenApiExample('Example 1',
+                           value={'price__sum': 1000},
+                           summary='Общая сумма услуг по счетам за период',
+                           response_only=True)
+        ],
+        parameters=[
+            OpenApiParameter('from_date', OpenApiTypes.DATE, OpenApiParameter.PATH),
+            OpenApiParameter('to_date', OpenApiTypes.DATE, OpenApiParameter.PATH),
+        ]
+    )
     @action(detail=False, url_path='total_service_sum/(?P<from_date>[^/.]+)/(?P<to_date>[^/.]+)')
     def total_service_sum(self, request, from_date, to_date) -> Response:
         queryset = Service.objects.filter(created_date__range=
