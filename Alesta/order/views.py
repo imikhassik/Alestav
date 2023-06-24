@@ -5,8 +5,6 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiParameter
 from rest_framework import viewsets
 from rest_framework import mixins
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -83,28 +81,3 @@ class InvoiceViewset(mixins.CreateModelMixin,
                      viewsets.GenericViewSet):
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
-
-
-class CustomAuthToken(ObtainAuthToken):
-    @extend_schema(request={
-        'application/json': {
-            "type": "object",
-            "properties": {
-                "username": {"type": "string"},
-                "password": {"type": "string"},
-            }
-        }
-    },
-    tags=['Токен'])
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.email
-        })
